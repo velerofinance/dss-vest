@@ -63,11 +63,11 @@ contract DssVestTest is DSTest {
     DssVestMintable vest;
     DssVestSuckable suckableVest;
 
-    address constant MKR_TOKEN = 0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2;
+    address constant VDGT_TOKEN = 0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2;
     address constant CHAINLOG = 0xdA0Ab1e0017DEbCd72Be8599041a2aa3bA7e740F;
     address constant VAT = 0x35D1b3F3D7966A1DFe207aa4514C12a259A0492B;
-    address constant DAI_JOIN = 0x9759A6Ac90977b93B58547b4A71c78317f391A28;
-    address constant DAI = 0x6B175474E89094C44Da98b954EedeAC495271d0F;
+    address constant USDV_JOIN = 0x9759A6Ac90977b93B58547b4A71c78317f391A28;
+    address constant USDV = 0x6B175474E89094C44Da98b954EedeAC495271d0F;
     address constant VOW = 0xA950524441892A31ebddF91d3cEEFa04Bf454466;
     uint256 constant WAD = 10**18;
     uint256 constant RAY = 10**27;
@@ -81,12 +81,12 @@ contract DssVestTest is DSTest {
 
     function setUp() public {
         hevm = Hevm(address(CHEAT_CODE));
-        vest = new DssVestMintable(MKR_TOKEN);
+        vest = new DssVestMintable(VDGT_TOKEN);
         vest.file("cap", (2000 * WAD) / (4 * 365 days));
         suckableVest = new DssVestSuckable(CHAINLOG);
         suckableVest.file("cap", (2000 * WAD) / (4 * 365 days));
 
-        // Set testing contract as a MKR Auth
+        // Set testing contract as a VDGT Auth
         hevm.store(
             address(GOV_GUARD),
             keccak256(abi.encode(address(vest), uint256(1))),
@@ -104,7 +104,7 @@ contract DssVestTest is DSTest {
     }
 
     function testCost() public {
-        new DssVestMintable(MKR_TOKEN);
+        new DssVestMintable(VDGT_TOKEN);
     }
 
     function testInit() public {
@@ -613,15 +613,15 @@ contract DssVestTest is DSTest {
         assertTrue(suckableVest.valid(id));
         hevm.warp(block.timestamp + 1 days);
         suckableVest.vest(id);
-        assertEq(Token(DAI).balanceOf(address(this)), 1 * days_vest);
+        assertEq(Token(USDV).balanceOf(address(this)), 1 * days_vest);
         assertEq(VatLikeTest(VAT).sin(VOW), originalSin + 1 * days_vest * RAY);
         hevm.warp(block.timestamp + 9 days);
         suckableVest.vest(id);
-        assertEq(Token(DAI).balanceOf(address(this)), 10 * days_vest);
+        assertEq(Token(USDV).balanceOf(address(this)), 10 * days_vest);
         assertEq(VatLikeTest(VAT).sin(VOW), originalSin + 10 * days_vest * RAY);
         hevm.warp(block.timestamp + 365 days);
         suckableVest.vest(id);
-        assertEq(Token(DAI).balanceOf(address(this)), 100 * days_vest);
+        assertEq(Token(USDV).balanceOf(address(this)), 100 * days_vest);
         assertEq(VatLikeTest(VAT).sin(VOW), originalSin + 100 * days_vest * RAY);
     }
 
@@ -719,15 +719,15 @@ contract DssVestTest is DSTest {
         User usr = new User();
         Manager boss = new Manager();
         hevm.store(
-            address(DAI),
+            address(USDV),
             keccak256(abi.encode(address(boss), uint(2))),
             bytes32(uint256(10000 * WAD))
         );
-        assertEq(Token(DAI).balanceOf(address(boss)), 10000 * WAD);
+        assertEq(Token(USDV).balanceOf(address(boss)), 10000 * WAD);
 
-        tVest = new DssVestTransferrable(address(boss), address(DAI));
+        tVest = new DssVestTransferrable(address(boss), address(USDV));
         tVest.file("cap", (2000 * WAD) / (4 * 365 days));
-        boss.gemApprove(address(DAI), address(tVest));
+        boss.gemApprove(address(USDV), address(tVest));
 
         uint256 id = tVest.create(
             address(usr),
@@ -741,19 +741,19 @@ contract DssVestTest is DSTest {
         assertTrue(tVest.valid(id));
         hevm.warp(block.timestamp + 1 days);
         tVest.vest(id);
-        assertEq(Token(DAI).balanceOf(address(usr)), 1 * days_vest);
-        assertEq(Token(DAI).balanceOf(address(boss)), 10000 * WAD - 1 * days_vest);
+        assertEq(Token(USDV).balanceOf(address(usr)), 1 * days_vest);
+        assertEq(Token(USDV).balanceOf(address(boss)), 10000 * WAD - 1 * days_vest);
         hevm.warp(block.timestamp + 9 days);
         tVest.vest(id);
-        assertEq(Token(DAI).balanceOf(address(usr)), 10 * days_vest);
-        assertEq(Token(DAI).balanceOf(address(boss)), 10000 * WAD - 10 * days_vest);
+        assertEq(Token(USDV).balanceOf(address(usr)), 10 * days_vest);
+        assertEq(Token(USDV).balanceOf(address(boss)), 10000 * WAD - 10 * days_vest);
         hevm.warp(block.timestamp + 365 days);
         tVest.vest(id);
-        assertEq(Token(DAI).balanceOf(address(usr)), 100 * days_vest);
-        assertEq(Token(DAI).balanceOf(address(boss)), 10000 * WAD - 100 * days_vest);
+        assertEq(Token(USDV).balanceOf(address(usr)), 100 * days_vest);
+        assertEq(Token(USDV).balanceOf(address(boss)), 10000 * WAD - 100 * days_vest);
         hevm.warp(block.timestamp + 365 days);
         tVest.vest(id);
-        assertEq(Token(DAI).balanceOf(address(usr)), 100 * days_vest);
-        assertEq(Token(DAI).balanceOf(address(boss)), 10000 * WAD - 100 * days_vest);
+        assertEq(Token(USDV).balanceOf(address(usr)), 100 * days_vest);
+        assertEq(Token(USDV).balanceOf(address(boss)), 10000 * WAD - 100 * days_vest);
     }
 }

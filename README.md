@@ -1,4 +1,4 @@
-[![Fuzz](https://github.com/makerdao/dss-vest/actions/workflows/fuzz.yml/badge.svg)](https://github.com/makerdao/dss-vest/actions/workflows/fuzz.yml)
+[comment]: <> ([![Fuzz]&#40;https://github.com/makerdao/dss-vest/actions/workflows/fuzz.yml/badge.svg&#41;]&#40;https://github.com/makerdao/dss-vest/actions/workflows/fuzz.yml&#41;)
 
 # dss-vest
 
@@ -30,7 +30,7 @@ After deployment, governance must set the `cap` value using the `file` function.
 
 #### DssVestSuckable
 
-Pass the MCD [chainlog](https://github.com/makerdao/dss-chain-log) address to the constructor to set up the contract for scheduled Dai `suck`s. Note: this contract must be given authority to `suck()` Dai from the `vat`'s surplus buffer.
+Pass the MCD [chainlog](https://github.com/velerofinance/dss-chain-log) address to the constructor to set up the contract for scheduled USDV `suck`s. Note: this contract must be given authority to `suck()` USDV from the `vat`'s surplus buffer.
 
 After deployment, governance must set the `cap` value using the `file` function.
 
@@ -48,7 +48,7 @@ Create a new vesting plan.
 
 - `_usr`: The plan beneficiary
 - `_tot`: The total amount of the vesting plan, in token units
-  - ex. 100 MKR = `100 * 10**18`
+  - ex. 100 VDGT = `100 * 10**18`
 - `_bgn`: A unix-timestamp of the plan start date
 - `_tau`: The duration of the vesting plan (in seconds)
 - `_eta`: The cliff period, a duration in seconds from the `_bgn` time, in which tokens are accrued but not payable. (in seconds)

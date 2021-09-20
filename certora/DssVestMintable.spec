@@ -90,7 +90,7 @@ rule TWENTY_YEARS() {
 rule TWENTY_YEARS_revert(uint256 _id) {
     TWENTY_YEARS@withrevert();
 
-    // The only revert path for the award getters is sending ETH.
+    // The only revert path for the award getters is sending VLX.
     // However as these getters are defined as envfree, it is already being checked
     // that are not payable by Certora prover, then not following that revertion
     // path in this rule. That's why it's ignored.
@@ -118,7 +118,7 @@ rule rely_revert(address usr) {
     bool revert1 = e.msg.value > 0;
     bool revert2 = ward != 1;
 
-    assert(revert1 => lastReverted, "Sending ETH did not revert");
+    assert(revert1 => lastReverted, "Sending VLX did not revert");
     assert(revert2 => lastReverted, "Lack of auth did not revert");
 
     assert(lastReverted => revert1 || revert2, "Revert rules are not covering all the cases");
@@ -144,7 +144,7 @@ rule deny_revert(address usr) {
     bool revert1 = e.msg.value > 0;
     bool revert2 = ward != 1;
 
-    assert(revert1 => lastReverted, "Sending ETH did not revert");
+    assert(revert1 => lastReverted, "Sending VLX did not revert");
     assert(revert2 => lastReverted, "Lack of auth did not revert");
 
     assert(lastReverted => revert1 || revert2, "Revert rules are not covering all the cases");
@@ -177,7 +177,7 @@ rule award(uint256 _id) {
 // Verify revert rules on award getters
 rule award_revert(uint256 _id) {
 
-    // The only revert path for the award getters is sending ETH.
+    // The only revert path for the award getters is sending VLX.
     // However as these getters are defined as envfree, it is already being checked
     // that are not payable by Certora prover, then not following that revertion
     // path in this rule. That's why it's ignored.
@@ -231,7 +231,7 @@ rule file_revert(bytes32 what, uint256 data) {
     bool revert3 = locked != 0;
     bool revert4 = what != 0x6361700000000000000000000000000000000000000000000000000000000000; // what != "cap"
 
-    assert(revert1 => lastReverted, "Sending ETH did not revert");
+    assert(revert1 => lastReverted, "Sending VLX did not revert");
     assert(revert2 => lastReverted, "Lack of auth did not revert");
     assert(revert3 => lastReverted, "Locked did not revert");
     assert(revert4 => lastReverted, "Unrecognized file param did not revert");
@@ -298,7 +298,7 @@ rule create_revert(address _usr, uint256 _tot, uint256 _bgn, uint256 _tau, uint2
     bool revert17 = fin > max_uint48();
     bool revert18 = _tot > max_uint128;
 
-    assert(revert1  => lastReverted, "Sending ETH did not revert");
+    assert(revert1  => lastReverted, "Sending VLX did not revert");
     assert(revert2  => lastReverted, "Lack of auth did not revert");
     assert(revert3  => lastReverted, "Locked did not revert");
     assert(revert4  => lastReverted, "Invalid user did not revert");
@@ -431,7 +431,7 @@ rule vest_revert(uint256 _id) {
     bool revert11 = usrBalance + unpaidAmt > max_uint256;
     bool revert12 = supply + unpaidAmt > max_uint256;
 
-    assert(revert1  => lastReverted, "Sending ETH did not revert");
+    assert(revert1  => lastReverted, "Sending VLX did not revert");
     assert(revert2  => lastReverted, "Locked did not revert");
     assert(revert3  => lastReverted, "Invalid award did not revert");
     assert(revert4  => lastReverted, "Only user can claim did not revert");
@@ -559,7 +559,7 @@ rule vest_amt_revert(uint256 _id, uint256 _maxAmt) {
     bool revert11 = usrBalance + amt > max_uint256;
     bool revert12 = supply + amt > max_uint256;
 
-    assert(revert1  => lastReverted, "Sending ETH did not revert");
+    assert(revert1  => lastReverted, "Sending VLX did not revert");
     assert(revert2  => lastReverted, "Locked did not revert");
     assert(revert3  => lastReverted, "Invalid award did not revert");
     assert(revert4  => lastReverted, "Only user can claim did not revert");
@@ -623,7 +623,7 @@ rule accrued_revert(uint256 _id) {
     bool revert3 = e.block.timestamp >= clf && e.block.timestamp >= bgn && e.block.timestamp < fin && tot * (e.block.timestamp - bgn) > max_uint256;
     bool revert4 = e.block.timestamp >= clf && e.block.timestamp >= bgn && e.block.timestamp < fin && fin == bgn;
 
-    assert(revert1 => lastReverted, "Sending ETH did not revert");
+    assert(revert1 => lastReverted, "Sending VLX did not revert");
     assert(revert2 => lastReverted, "Invalid award did not revert");
     assert(revert3 => lastReverted, "Overflow tot * time passed did not revert");
     assert(revert4 => lastReverted, "Division by zero did not revert");
@@ -678,7 +678,7 @@ rule unpaid_revert(uint256 _id) {
     bool revert4 = e.block.timestamp >= clf && e.block.timestamp >= bgn && e.block.timestamp < fin && fin == bgn;
     bool revert5 = e.block.timestamp >= clf && accruedAmt < rxd;
 
-    assert(revert1 => lastReverted, "Sending ETH did not revert");
+    assert(revert1 => lastReverted, "Sending VLX did not revert");
     assert(revert2 => lastReverted, "Invalid award did not revert");
     assert(revert3 => lastReverted, "Overflow tot * time passed did not revert");
     assert(revert4 => lastReverted, "Division by zero did not revert");
@@ -713,7 +713,7 @@ rule restrict_revert(uint256 _id) {
     bool revert3 = _usr == 0;
     bool revert4 = ward != 1 && _usr != e.msg.sender;
 
-    assert(revert1 => lastReverted, "Sending ETH did not revert");
+    assert(revert1 => lastReverted, "Sending VLX did not revert");
     assert(revert2 => lastReverted, "Locked did not revert");
     assert(revert3 => lastReverted, "Invalid award did not revert");
     assert(revert4 => lastReverted, "Only governance or owner can restrict did not revert");
@@ -745,7 +745,7 @@ rule unrestrict_revert(uint256 _id) {
     bool revert3 = _usr == 0;
     bool revert4 = ward != 1 && _usr != e.msg.sender;
 
-    assert(revert1 => lastReverted, "Sending ETH did not revert");
+    assert(revert1 => lastReverted, "Sending VLX did not revert");
     assert(revert2 => lastReverted, "Locked did not revert");
     assert(revert3 => lastReverted, "Invalid award did not revert");
     assert(revert4 => lastReverted, "Only governance or owner can unrestrict did not revert");
@@ -832,7 +832,7 @@ rule yank_revert(uint256 _id) {
     bool revert8 = e.block.timestamp < fin && e.block.timestamp >= bgn && e.block.timestamp >= clf && accruedAmt < rxd;
     bool revert9 = e.block.timestamp < fin && e.block.timestamp >= bgn && e.block.timestamp >= clf && rxd + unpaidAmt > max_uint128;
 
-    assert(revert1 => lastReverted, "Sending ETH did not revert");
+    assert(revert1 => lastReverted, "Sending VLX did not revert");
     assert(revert2 => lastReverted, "Locked did not revert");
     assert(revert3 => lastReverted, "Not authorized did not revert");
     assert(revert4 => lastReverted, "Invalid award did not revert");
@@ -929,7 +929,7 @@ rule yank_end_revert(uint256 _id, uint256 _end) {
     bool revert8 = _end2 < fin && _end2 >= bgn && _end2 >= clf && accruedAmt < rxd;
     bool revert9 = _end2 < fin && _end2 >= bgn && _end2 >= clf && rxd + unpaidAmt > max_uint128;
 
-    assert(revert1 => lastReverted, "Sending ETH did not revert");
+    assert(revert1 => lastReverted, "Sending VLX did not revert");
     assert(revert2 => lastReverted, "Locked did not revert");
     assert(revert3 => lastReverted, "Not authorized did not revert");
     assert(revert4 => lastReverted, "Invalid award did not revert");
@@ -968,7 +968,7 @@ rule move_revert(uint256 _id, address _dst) {
     bool revert3 = _usr != e.msg.sender;
     bool revert4 = _dst == 0;
 
-    assert(revert1 => lastReverted, "Sending ETH did not revert");
+    assert(revert1 => lastReverted, "Sending VLX did not revert");
     assert(revert2 => lastReverted, "Locked did not revert");
     assert(revert3 => lastReverted, "Only user can move did not revert");
     assert(revert4 => lastReverted, "Zero address invalid did not revert");
@@ -994,7 +994,7 @@ rule valid_revert(uint256 _id) {
 
     valid@withrevert(_id);
 
-    // The only revert path for this function is sending ETH.
+    // The only revert path for this function is sending VLX.
     // However as this function is defined as envfree, it is already being checked
     // that is not payable by Certora prover, then not following that revertion
     // path in this rule. That's why it's ignored.
